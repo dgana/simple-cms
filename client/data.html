@@ -39,16 +39,13 @@
           <a class="waves-effect waves-light btn" href="#modal_add"><i class="material-icons left">list</i>Add Data</a>
 
         </div>
-        <div class="col s4 offset-s1">
+        <div class="col s6 offset-s1">
           <div class="input-field inline" style="margin-right:20px;">
             <input id="search_letter" placeholder="Search by Letter" type="text" class="validate">
           </div>
           <div class="input-field inline">
             <input id="search_frequency" placeholder="Search by Frequency" type="text" class="validate">
           </div>
-        </div>
-        <div class="col s3 center" style="margin-top:25px;">
-          <button id="search_button" class="waves-effect waves-light btn"><i class="material-icons left">search</i>Search</button>
         </div>
       </div>
       <div class="row">
@@ -255,7 +252,19 @@
     }
   }
 
-  $('#search_button').click(function (e) {
+  $('#search_letter').keyup(function (e) {
+    e.preventDefault()
+    let freq = $('#search_frequency').val()
+    let letr = $('#search_letter').val()
+    if (!freq && !letr) {
+      $('#table_content').html('')
+      getAllData()
+    } else {
+      search()
+    }
+  })
+
+  $('#search_frequency').keyup(function (e) {
     e.preventDefault()
     let freq = $('#search_frequency').val()
     let letr = $('#search_letter').val()
