@@ -14,11 +14,11 @@
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Login Page</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="#">Home</a></li>
+        <li><a href="http://127.0.0.1:8080/">Home</a></li>
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
-        <li><a href="#">Home</a></li>
+        <li><a href="http://127.0.0.1:8080/">Home</a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
@@ -80,12 +80,6 @@
                         <label for="register_password">Password</label>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="input-field col s10 offset-s1">
-                        <input id="register_email" placeholder="Input your email here" type="email" name="email" class="validate">
-                        <label for="register_email">Email</label>
-                      </div>
-                    </div>
                   </div>
                   <div class="card-action">
                     <button id="submit_register" class="waves-effect waves-light btn"><i class="material-icons left">input</i>Register</button>
@@ -116,8 +110,7 @@
           dataType: 'json',
           data: {
             username: $('#register_username').val(),
-            password: $('#register_password').val(),
-            email: $('#register_email').val(),
+            password: $('#register_password').val()
           },
           success: function(data) {
             if(data.username){
@@ -128,6 +121,7 @@
           }
         })
       })
+
       $('#submit_login').click(function(e) {
         e.preventDefault()
         $.ajax({
@@ -136,16 +130,16 @@
           dataType: 'json',
           data: {
             username: $('#login_username').val(),
-            password: $('#login_password').val(),
+            password: $('#login_password').val()
           },
           success: function(data) {
             console.log('SUCCESS');
             console.log(data);
+            console.log(data.username);
             if(!data){
               Materialize.toast("Wrong username or password!", 4000)
             } else {
               localStorage.setItem('token', data.token)
-              localStorage.setItem('email', data.email)
               localStorage.setItem('username', data.username)
               location.href = 'http://127.0.0.1:8080/home.html'
             }

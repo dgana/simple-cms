@@ -49,7 +49,7 @@
         location.href = 'http://127.0.0.1:8080'
       }
 
-      $('#welcome_home').html(`Welcome, ${localStorage.getItem('email')}`)
+      $('#welcome_home').html(`Welcome, ${localStorage.getItem('username')}`)
       $('#logout').click(function(){
         localStorage.clear()
         location.href = 'http://127.0.0.1:8080'
