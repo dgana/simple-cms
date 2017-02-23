@@ -71,7 +71,7 @@ module.exports = {
         }
         return res.json(datas)
       })
-    } else if (/\//.test(search)) {
+    } else if (/\-/.test(search)) {
       console.log('DATE')
       dataDatesModel.find({ date: search }, function (err, datas) {
         if (err) {

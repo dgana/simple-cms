@@ -41,7 +41,7 @@
         </div>
         <div class="col s4 offset-s1">
           <div class="input-field inline" style="margin-right:20px;">
-            <input id="search_letter" placeholder="Search by Date" type="date" class="datepicker">
+            <input id="search_letter" placeholder="Search by Date" type="date" class="validate">
           </div>
           <div class="input-field inline">
             <input id="search_frequency" placeholder="Search by Frequency" type="text" class="validate">
@@ -72,13 +72,12 @@
 
 
       <div id="modal_add" class="modal" style="overflow:hidden">
-        <div class="modal-content" style="height:700px;">
+        <div class="modal-content" style="height:400px;">
           <div class="row">
             <form class="col s12">
                 <div class="input-field col s12">
-                  <input id="add_date" placeholder="Date" type="date" class="datepicker">
+                  <input id="add_date" placeholder="Date" type="date" class="validate">
                 </div>
-
 
                 <div class="input-field col s12">
                   <input id="add_frequency" placeholder="Frequency" type="number" class="validate">
@@ -93,11 +92,11 @@
       </div>
 
       <div id="modal_update" class="modal" style="overflow:hidden">
-        <div class="modal-content" style="height:700px;">
+        <div class="modal-content" style="height:400px;">
           <div class="row">
             <form class="col s12">
                 <div class="input-field col s12">
-                  <input id="update_date" placeholder="Date" type="date" class="datepicker">
+                  <input id="update_date" placeholder="Date" type="date" class="validate">
                 </div>
 
 
@@ -135,10 +134,10 @@
     location.href = 'http://127.0.0.1:8080'
   })
 
-  $('.datepicker').pickadate({
-     selectMonths: true, // Creates a dropdown to control month
-     selectYears: 15 // Creates a dropdown of 15 years to control year
-   });
+  // $('.datepicker').pickadate({
+  //    selectMonths: true, // Creates a dropdown to control month
+  //    selectYears: 15 // Creates a dropdown of 15 years to control year
+  //  });
 
   $('.modal').modal()
 
@@ -146,7 +145,7 @@
     index = 0
     $.ajax({
       type: 'GET',
-      url: 'http://localhost:3000/api/datas',
+      url: 'http://localhost:3000/api/datadates',
       dataType: 'json',
       beforeSend: function (req) {
         req.setRequestHeader('token', localStorage.getItem('token'))
@@ -155,33 +154,32 @@
         data.forEach(function (data) {
           $('#table_content').append(
             `
-                  <tr id="row_${index}">
-                    <td>${index+1}</td>
-                    <td>${data.letter}</td>
-                    <td>${data.frequency}</td>
-                    <td>
-                      <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
-                      <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
-                    </td>
-                  </tr>
-                `
+              <tr id="row_${index}">
+                <td>${index+1}</td>
+                <td>${data.date}</td>
+                <td>${data.frequency}</td>
+                <td>
+                  <button onclick="updateData('${data._id}', '${data.date}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                  <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
+                </td>
+              </tr>
+            `
           )
           index++
         })
       }
     })
   }
-
   getAllData()
 
   $('#add_submit').click(function (e) {
     e.preventDefault()
     $.ajax({
       type: 'POST',
-      url: 'http://localhost:3000/api/datas',
+      url: 'http://localhost:3000/api/datadates',
       dataType: 'json',
       data: {
-        letter: $('#add_letter').val(),
+        date: $('#add_date').val(),
         frequency: $('#add_frequency').val()
       },
       beforeSend: function (req) {
@@ -190,34 +188,34 @@
       success: function (data) {
         $('#table_content').append(
           `
-                <tr id="row_${index}">
-                  <td>${index+1}</td>
-                  <td>${data.letter}</td>
-                  <td>${data.frequency}</td>
-                  <td>
-                    <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
-                    <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
-                  </td>
-                </tr>
-              `
+            <tr id="row_${index}">
+              <td>${index+1}</td>
+              <td>${data.date}</td>
+              <td>${data.frequency}</td>
+              <td>
+                <button onclick="updateData('${data._id}', '${data.date}', ${data.frequency}, ${index})" data-target="modal_update" class="waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
+              </td>
+            </tr>
+          `
         )
         index++
       }
     })
   })
 
-  function updateData (id, letter, frequency, i) {
-    $('#update_letter').val(letter)
+  function updateData (id, date, frequency, i) {
+    $('#update_date').val(date)
     $('#update_frequency').val(frequency)
 
     $('#update_submit').click(function (e) {
       e.preventDefault()
       $.ajax({
         type: 'PUT',
-        url: 'http://localhost:3000/api/datas/' + id,
+        url: 'http://localhost:3000/api/datadates/' + id,
         dataType: 'json',
         data: {
-          letter: $('#update_letter').val(),
+          date: $('#update_date').val(),
           frequency: $('#update_frequency').val()
         },
         beforeSend: function (req) {
@@ -228,14 +226,14 @@
           console.log(i)
           $('#row_' + i).html(
             `
-                  <td>${i+1}</td>
-                  <td>${data.letter}</td>
-                  <td>${data.frequency}</td>
-                  <td>
-                    <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${i})" data-target="modal_update" class="waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
-                    <button onclick="deleteData('${data._id}', ${i})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
-                  </td>
-                `
+              <td>${i+1}</td>
+              <td>${data.date}</td>
+              <td>${data.frequency}</td>
+              <td>
+                <button onclick="updateData('${data._id}', '${data.date}', ${data.frequency}, ${i})" data-target="modal_update" class="waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                <button onclick="deleteData('${data._id}', ${i})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
+              </td>
+            `
           )
         }
       })
@@ -247,7 +245,7 @@
     if (result) {
       $.ajax({
         type: 'DELETE',
-        url: 'http://localhost:3000/api/datas/' + id,
+        url: 'http://localhost:3000/api/datadates/' + id,
         dataType: 'json',
         beforeSend: function (req) {
           req.setRequestHeader('token', localStorage.getItem('token'))
