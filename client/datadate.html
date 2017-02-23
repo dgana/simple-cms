@@ -212,7 +212,7 @@
       e.preventDefault()
       $.ajax({
         type: 'PUT',
-        url: 'http://localhost:3000/api/datadates/' + id,
+        url: 'http://localhost:3000/api/datadates/'+id,
         dataType: 'json',
         data: {
           date: $('#update_date').val(),
