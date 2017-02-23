@@ -190,7 +190,7 @@
                   <td>${data.letter}</td>
                   <td>${data.frequency}</td>
                   <td>
-                    <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" class="waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                    <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
                     <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
                   </td>
                 </tr>
@@ -223,12 +223,12 @@
           console.log(i)
           $('#row_' + i).html(
             `
-                  <td>${index}</td>
+                  <td>${i+1}</td>
                   <td>${data.letter}</td>
                   <td>${data.frequency}</td>
                   <td>
-                    <button onclick="editData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" class="waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
-                    <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
+                    <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${i})" data-target="modal_update" class="waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                    <button onclick="deleteData('${data._id}', ${i})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
                   </td>
                 `
           )
@@ -237,102 +237,108 @@
     })
   }
 
+  function deleteData(id, i) {
+    let result = confirm("Want to delete?");
+    if (result) {
+      $.ajax({
+        type: 'DELETE',
+        url: 'http://localhost:3000/api/datas/' + id,
+        dataType: 'json',
+        beforeSend: function (req) {
+          req.setRequestHeader('token', localStorage.getItem('token'))
+        },
+        success: function (data) {
+          $('#table_content').html('')
+          getAllData()
+        }
+      })
+    }
+  }
+
   $('#search_button').click(function (e) {
     e.preventDefault()
     let freq = $('#search_frequency').val()
     let letr = $('#search_letter').val()
-    console.log(freq)
-    console.log(letr)
     if (!freq && !letr) {
       $('#table_content').html('')
       getAllData()
-    } else if (!freq || !letr) {
-      searchOne()
     } else {
-      searchBoth()
+      search()
     }
   })
 
-  function searchOne () {
+  function search () {
     let letr = $('#search_letter').val()
     let freq = $('#search_frequency').val()
-    let pickedSearch
+    let pickedSearch;
 
-    if (!letr) {
-      pickedSearch = freq
+    if(letr && freq) {
+      $.ajax({
+        type: 'GET',
+        url: `http://localhost:3000/api/datas/search?q=${letr}&f=${freq}`,
+        dataType: 'json',
+        beforeSend: function (req) {
+          req.setRequestHeader('token', localStorage.getItem('token'))
+        },
+        success: function (data) {
+          index = 0
+
+          $('#table_content').html('')
+          data.forEach(function (data) {
+            $('#table_content').append(
+              `
+                    <tr id="row_${index}">
+                      <td>${index+1}</td>
+                      <td>${data.letter}</td>
+                      <td>${data.frequency}</td>
+                      <td>
+                        <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                        <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
+                      </td>
+                    </tr>
+                  `
+            )
+            index++
+          })
+        }
+      })
     } else {
-      pickedSearch = letr
+      if(!letr && freq)  {
+        pickedSearch = freq
+      } else {
+        pickedSearch = letr
+      }
+      $.ajax({
+        type: 'GET',
+        url: `http://localhost:3000/api/datas/search?q=${pickedSearch}`,
+        dataType: 'json',
+        beforeSend: function (req) {
+          req.setRequestHeader('token', localStorage.getItem('token'))
+        },
+        success: function (data) {
+          index = 0
+
+          $('#table_content').html('')
+          data.forEach(function (data) {
+            $('#table_content').append(
+              `
+                    <tr id="row_${index}">
+                      <td>${index+1}</td>
+                      <td>${data.letter}</td>
+                      <td>${data.frequency}</td>
+                      <td>
+                        <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                        <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
+                      </td>
+                    </tr>
+                  `
+            )
+            index++
+          })
+        }
+      })
     }
-
-    $.ajax({
-      type: 'GET',
-      url: `http://localhost:3000/api/datas/search?q=${pickedSearch}`,
-      dataType: 'json',
-      beforeSend: function (req) {
-        req.setRequestHeader('token', localStorage.getItem('token'))
-      },
-      success: function (data) {
-        index = 0
-        console.log('MASUK SEARCH ONE')
-
-        $('#table_content').html('')
-        data.forEach(function (data) {
-          $('#table_content').append(
-            `
-                  <tr id="row_${index}">
-                    <td>${index+1}</td>
-                    <td>${data.letter}</td>
-                    <td>${data.frequency}</td>
-                    <td>
-                      <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
-                      <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
-                    </td>
-                  </tr>
-                `
-          )
-          index++
-        })
-      }
-    })
   }
-
-  function searchBoth () {
-    let letr = $('#search_letter').val()
-    let freq = $('#search_frequency').val()
-
-    $.ajax({
-      type: 'GET',
-      url: `http://localhost:3000/api/datas/searchAll?q=${letr}&f=${freq}`,
-      dataType: 'json',
-      beforeSend: function (req) {
-        req.setRequestHeader('token', localStorage.getItem('token'))
-      },
-      success: function (data) {
-        index = 0
-        console.log('MASUK SEARCH BOTH')
-
-        $('#table_content').html('')
-        data.forEach(function (data) {
-          $('#table_content').append(
-            `
-                  <tr id="row_${index}">
-                    <td>${index+1}</td>
-                    <td>${data.letter}</td>
-                    <td>${data.frequency}</td>
-                    <td>
-                      <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
-                      <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
-                    </td>
-                  </tr>
-                `
-          )
-          index++
-        })
-      }
-    })
-  }
-
-
   </script>
 
   </body>
