@@ -14,7 +14,7 @@ module.exports = {
   },
 
   create: function (req, res) {
-    var datas = new datasModel({
+    var datas = new dataDatesModel({
       date: req.body.date,
       frequency: req.body.frequency
     })
@@ -32,6 +32,7 @@ module.exports = {
 
   update: function (req, res) {
     var id = req.params.id
+    console.log(id)
     dataDatesModel.findOneAndUpdate({_id: id}, { date: req.body.date, frequency: req.body.frequency }, {new: true}, function (err, doc) {
       if (err) return res.send(500, { error: err })
       return res.json(doc)
@@ -55,7 +56,8 @@ module.exports = {
     let search = req.query.q
 
     if (req.query.f) {
-      dataDatesModel.find({ $and: [{ frequency: req.query.f }, { letter: search }] }, function (err, datas) {
+      console.log('DATE FREQ')
+      dataDatesModel.find({ $and: [{ frequency: req.query.f }, { date: search }] }, function (err, datas) {
         if (err) {
           return res.status(500).json({
             message: 'Error when deleting the datas.',
@@ -69,8 +71,9 @@ module.exports = {
         }
         return res.json(datas)
       })
-    } else if (/^\d/.test(search)) {
-      dataDatesModel.find({ $and: [{ frequency: search }, { letter: { $exists: true }}] }, function (err, datas) {
+    } else if (/\//.test(search)) {
+      console.log('DATE')
+      dataDatesModel.find({ date: search }, function (err, datas) {
         if (err) {
           return res.status(500).json({
             message: 'Error when deleting the datas.',
@@ -85,7 +88,8 @@ module.exports = {
         return res.json(datas)
       })
     } else {
-      dataDatesModel.find({ $and: [{ letter: search }, { frequency: { $exists: true }}] }, function (err, datas) {
+      console.log('FREQ')
+      dataDatesModel.find({ frequency: search }, function (err, datas) {
         if (err) {
           return res.status(500).json({
             message: 'Error when deleting the datas.',

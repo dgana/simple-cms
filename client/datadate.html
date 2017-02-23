@@ -14,7 +14,7 @@
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container">
       <ul class="left hide-on-med-and-down">
-        <li><a href="http://127.0.0.1:8080/data.html" style="margin-right:35px; font-size:24px;">Data</a></li>
+        <li><a href="http://127.0.0.1:8080/data.html" style="margin-right:35px; font-size:24px;">Data Date</a></li>
         <li><a href="http://127.0.0.1:8080/home.html">Home</a></li>
         <li><a href="http://127.0.0.1:8080/data.html">Data</a></li>
         <li><a href="http://127.0.0.1:8080/datadate.html">Data Date</a></li>
@@ -41,7 +41,7 @@
         </div>
         <div class="col s4 offset-s1">
           <div class="input-field inline" style="margin-right:20px;">
-            <input id="search_letter" placeholder="Search by Date" type="text" class="validate">
+            <input id="search_letter" placeholder="Search by Date" type="date" class="datepicker">
           </div>
           <div class="input-field inline">
             <input id="search_frequency" placeholder="Search by Frequency" type="text" class="validate">
@@ -71,12 +71,12 @@
 
 
 
-      <div id="modal_add" class="modal">
-        <div class="modal-content">
+      <div id="modal_add" class="modal" style="overflow:hidden">
+        <div class="modal-content" style="height:700px;">
           <div class="row">
             <form class="col s12">
                 <div class="input-field col s12">
-                  <input id="add_letter" placeholder="Letter" type="text" class="validate">
+                  <input id="add_date" placeholder="Date" type="date" class="datepicker">
                 </div>
 
 
@@ -92,12 +92,12 @@
         </div>
       </div>
 
-      <div id="modal_update" class="modal">
-        <div class="modal-content">
+      <div id="modal_update" class="modal" style="overflow:hidden">
+        <div class="modal-content" style="height:700px;">
           <div class="row">
             <form class="col s12">
                 <div class="input-field col s12">
-                  <input id="update_letter" placeholder="Letter" type="text" class="validate">
+                  <input id="update_date" placeholder="Date" type="date" class="datepicker">
                 </div>
 
 
@@ -134,6 +134,11 @@
     localStorage.clear()
     location.href = 'http://127.0.0.1:8080'
   })
+
+  $('.datepicker').pickadate({
+     selectMonths: true, // Creates a dropdown to control month
+     selectYears: 15 // Creates a dropdown of 15 years to control year
+   });
 
   $('.modal').modal()
 
