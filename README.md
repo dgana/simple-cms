@@ -23,8 +23,7 @@ Build my own `simple CMS` using mongoose and express to pass Final live coding i
 | `/api/datas`            | POST    | Create a data
 | `/api/datas/:id`        | PUT     | Update data
 | `/api/datas/:id`        | DELETE  | Delete a data
-| `/api/datas/search`     | GET     | Search a data by letter or frequency using req.query
-| `/api/datas/searchAll`  | GET     | Search a data by letter and frequency using req.query
+| `/api/datas/search`     | GET     | Search a data by letter or frequency or BOTH using req.query
 
 ### Data Dates
 
@@ -34,8 +33,7 @@ Build my own `simple CMS` using mongoose and express to pass Final live coding i
 | `/api/datadates`            | POST    | Create a data date
 | `/api/datadates/:id`        | PUT     | Update data date
 | `/api/datadates/:id`        | DELETE  | Delete a data date
-| `/api/datadates/search`     | GET     | Search a data date by letter or frequency using req.query
-| `/api/datadates/searchAll`  | GET     | Search a data date by letter and frequency using req.query
+| `/api/datadates/search`     | GET     | Search a data date by letter or BOTH frequency using req.query
 
 ## Schema Collections
 <hr>
