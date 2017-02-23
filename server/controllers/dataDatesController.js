@@ -1,111 +1,104 @@
-var dataDatesModel = require('../models/dataDatesModel.js');
+var dataDatesModel = require('../models/dataDatesModel.js')
 
-/**
- * dataDatesController.js
- *
- * @description :: Server-side logic for managing dataDatess.
- */
 module.exports = {
+  list: function (req, res) {
+    dataDatesModel.find(function (err, datas) {
+      if (err) {
+        return res.status(500).json({
+          message: 'Error when getting datas.',
+          error: err
+        })
+      }
+      return res.json(datas)
+    })
+  },
 
-    /**
-     * dataDatesController.list()
-     */
-    list: function (req, res) {
-        dataDatesModel.find(function (err, dataDatess) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting dataDates.',
-                    error: err
-                });
-            }
-            return res.json(dataDatess);
-        });
-    },
+  create: function (req, res) {
+    var datas = new datasModel({
+      date: req.body.date,
+      frequency: req.body.frequency
+    })
 
-    /**
-     * dataDatesController.show()
-     */
-    show: function (req, res) {
-        var id = req.params.id;
-        dataDatesModel.findOne({_id: id}, function (err, dataDates) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting dataDates.',
-                    error: err
-                });
-            }
-            if (!dataDates) {
-                return res.status(404).json({
-                    message: 'No such dataDates'
-                });
-            }
-            return res.json(dataDates);
-        });
-    },
+    datas.save(function (err, datas) {
+      if (err) {
+        return res.status(500).json({
+          message: 'Error when creating datas',
+          error: err
+        })
+      }
+      return res.status(201).json(datas)
+    })
+  },
 
-    /**
-     * dataDatesController.create()
-     */
-    create: function (req, res) {
-        var dataDates = new dataDatesModel({			date : req.body.date,			frequency : req.body.frequency
-        });
+  update: function (req, res) {
+    var id = req.params.id
+    dataDatesModel.findOneAndUpdate({_id: id}, { date: req.body.date, frequency: req.body.frequency }, {new: true}, function (err, doc) {
+      if (err) return res.send(500, { error: err })
+      return res.json(doc)
+    })
+  },
 
-        dataDates.save(function (err, dataDates) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating dataDates',
-                    error: err
-                });
-            }
-            return res.status(201).json(dataDates);
-        });
-    },
+  remove: function (req, res) {
+    var id = req.params.id
+    dataDatesModel.findByIdAndRemove(id, function (err, datas) {
+      if (err) {
+        return res.status(500).json({
+          message: 'Error when deleting the datas.',
+          error: err
+        })
+      }
+      return res.status(201).json(datas)
+    })
+  },
 
-    /**
-     * dataDatesController.update()
-     */
-    update: function (req, res) {
-        var id = req.params.id;
-        dataDatesModel.findOne({_id: id}, function (err, dataDates) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting dataDates',
-                    error: err
-                });
-            }
-            if (!dataDates) {
-                return res.status(404).json({
-                    message: 'No such dataDates'
-                });
-            }
+  search: function (req, res) {
+    let search = req.query.q
 
-            dataDates.date = req.body.date ? req.body.date : dataDates.date;			dataDates.frequency = req.body.frequency ? req.body.frequency : dataDates.frequency;			
-            dataDates.save(function (err, dataDates) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when updating dataDates.',
-                        error: err
-                    });
-                }
-
-                return res.json(dataDates);
-            });
-        });
-    },
-
-    /**
-     * dataDatesController.remove()
-     */
-    remove: function (req, res) {
-        var id = req.params.id;
-        dataDatesModel.findByIdAndRemove(id, function (err, dataDates) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when deleting the dataDates.',
-                    error: err
-                });
-            }
-            return res.status(204).json();
-        });
+    if (req.query.f) {
+      dataDatesModel.find({ $and: [{ frequency: req.query.f }, { letter: search }] }, function (err, datas) {
+        if (err) {
+          return res.status(500).json({
+            message: 'Error when deleting the datas.',
+            error: err
+          })
+        }
+        if (!datas) {
+          return res.status(404).json({
+            message: 'No such datas'
+          })
+        }
+        return res.json(datas)
+      })
+    } else if (/^\d/.test(search)) {
+      dataDatesModel.find({ $and: [{ frequency: search }, { letter: { $exists: true }}] }, function (err, datas) {
+        if (err) {
+          return res.status(500).json({
+            message: 'Error when deleting the datas.',
+            error: err
+          })
+        }
+        if (!datas) {
+          return res.status(404).json({
+            message: 'No such datas'
+          })
+        }
+        return res.json(datas)
+      })
+    } else {
+      dataDatesModel.find({ $and: [{ letter: search }, { frequency: { $exists: true }}] }, function (err, datas) {
+        if (err) {
+          return res.status(500).json({
+            message: 'Error when deleting the datas.',
+            error: err
+          })
+        }
+        if (!datas) {
+          return res.status(404).json({
+            message: 'No such datas'
+          })
+        }
+        return res.json(datas)
+      })
     }
-};
+  }
+}
