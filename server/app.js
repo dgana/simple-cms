@@ -10,7 +10,6 @@ const cors = require('cors')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const hash = require('password-hash')
-const jwt = require('jsonwebtoken')
 
 mongoose.connect('mongodb://localhost/cms')
 var db = mongoose.connection
