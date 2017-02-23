@@ -1,6 +1,20 @@
 var datasModel = require('../models/datasModel.js')
+const seedData = require('../seeder/seedData')
+const mongoose = require('mongoose')
 
 module.exports = {
+  seed: function (req, res) {
+    mongoose.connection.db.dropCollection('datas', (err, result) => {
+      if (err) throw err
+      console.log('Dropped collection: datas')
+    })
+
+    datasModel.create(seedData, (err, datas) => {
+      if (err) throw err
+      res.json(datas)
+    })
+  },
+
   list: function (req, res) {
     datasModel.find(function (err, datas) {
       if (err) {

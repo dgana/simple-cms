@@ -9,4 +9,6 @@ router.delete('/:id', datasController.remove)
 
 router.get('/search', datasController.search)
 
+router.post('/seed', datasController.seed)
+
 module.exports = router
