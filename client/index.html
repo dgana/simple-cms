@@ -14,20 +14,25 @@
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Landing Page</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="http://127.0.0.1:8080/login.html">Signin</a></li>
+        <li><a href="http://127.0.0.1:8080/login.html">Admin Page</a></li>
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
-        <li><a href="http://127.0.0.1:8080/login.html">Signin</a></li>
+        <li><a href="http://127.0.0.1:8080/login.html">Admin Page</a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 
 
-  <div class="container">
+  <div class="container" style="margin-top:35px;">
     <div class="section">
-
+      <div class="carousel carousel-slider">
+        <a class="carousel-item" href="#one!"><img src="http://lorempixel.com/800/400/food/1"></a>
+        <a class="carousel-item" href="#two!"><img src="http://lorempixel.com/800/400/food/2"></a>
+        <a class="carousel-item" href="#three!"><img src="http://lorempixel.com/800/400/food/3"></a>
+        <a class="carousel-item" href="#four!"><img src="http://lorempixel.com/800/400/food/4"></a>
+      </div>
     </div>
   </div>
 
@@ -36,6 +41,10 @@
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
-
+  <script>
+    $($(document).ready(function() {
+      $('.carousel.carousel-slider').carousel({fullWidth: true})
+    }))
+  </script>
   </body>
 </html>
