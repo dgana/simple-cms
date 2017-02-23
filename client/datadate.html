@@ -41,7 +41,7 @@
         </div>
         <div class="col s4 offset-s1">
           <div class="input-field inline" style="margin-right:20px;">
-            <input id="search_letter" placeholder="Search by Date" type="date" class="validate">
+            <input id="search_date" placeholder="Search by Date" type="date" class="validate">
           </div>
           <div class="input-field inline">
             <input id="search_frequency" placeholder="Search by Frequency" type="text" class="validate">
@@ -261,7 +261,7 @@
   $('#search_button').click(function (e) {
     e.preventDefault()
     let freq = $('#search_frequency').val()
-    let letr = $('#search_letter').val()
+    let letr = $('#search_date').val()
     if (!freq && !letr) {
       $('#table_content').html('')
       getAllData()
@@ -271,14 +271,14 @@
   })
 
   function search () {
-    let letr = $('#search_letter').val()
+    let letr = $('#search_date').val()
     let freq = $('#search_frequency').val()
     let pickedSearch;
 
     if(letr && freq) {
       $.ajax({
         type: 'GET',
-        url: `http://localhost:3000/api/datas/search?q=${letr}&f=${freq}`,
+        url: `http://localhost:3000/api/datadates/search?q=${letr}&f=${freq}`,
         dataType: 'json',
         beforeSend: function (req) {
           req.setRequestHeader('token', localStorage.getItem('token'))
@@ -292,10 +292,10 @@
               `
                     <tr id="row_${index}">
                       <td>${index+1}</td>
-                      <td>${data.letter}</td>
+                      <td>${data.date}</td>
                       <td>${data.frequency}</td>
                       <td>
-                        <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                        <button onclick="updateData('${data._id}', '${data.date}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
                         <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
                       </td>
                     </tr>
@@ -313,7 +313,7 @@
       }
       $.ajax({
         type: 'GET',
-        url: `http://localhost:3000/api/datas/search?q=${pickedSearch}`,
+        url: `http://localhost:3000/api/datadates/search?q=${pickedSearch}`,
         dataType: 'json',
         beforeSend: function (req) {
           req.setRequestHeader('token', localStorage.getItem('token'))
@@ -327,10 +327,10 @@
               `
                     <tr id="row_${index}">
                       <td>${index+1}</td>
-                      <td>${data.letter}</td>
+                      <td>${data.date}</td>
                       <td>${data.frequency}</td>
                       <td>
-                        <button onclick="updateData('${data._id}', '${data.letter}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
+                        <button onclick="updateData('${data._id}', '${data.date}', ${data.frequency}, ${index})" data-target="modal_update" class="modal2 waves-effect waves-light blue darken-1 btn"><i class="material-icons left">update</i>Update</button>
                         <button onclick="deleteData('${data._id}', ${index})" class="waves-effect waves-light red darken-1 btn"><i class="material-icons left">delete</i>Delete</button>
                       </td>
                     </tr>
