@@ -1,30 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var datasController = require('../controllers/datasController.js');
+var express = require('express')
+var router = express.Router()
+var datasController = require('../controllers/datasController.js')
 
-/*
- * GET
- */
-router.get('/', datasController.list);
+router.get('/', datasController.list)
+router.post('/', datasController.create)
+router.put('/:id', datasController.update)
+router.delete('/:id', datasController.remove)
 
-/*
- * GET
- */
-router.get('/:id', datasController.show);
-
-/*
- * POST
- */
-router.post('/', datasController.create);
-
-/*
- * PUT
- */
-router.put('/:id', datasController.update);
-
-/*
- * DELETE
- */
-router.delete('/:id', datasController.remove);
-
-module.exports = router;
+module.exports = router
