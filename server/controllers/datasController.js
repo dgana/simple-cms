@@ -73,19 +73,37 @@ module.exports = {
 
   search: function (req, res) {
     let search = req.query.q
-    datasModel.find({ $and: [{ letter: search }, { frequency: { $exists: true }}] }, function (err, data) {
-      if (err) {
-        return res.status(500).json({
-          message: 'Error when deleting the datas.',
-          error: err
-        })
-      }
-      if (!datas) {
-        return res.status(404).json({
-          message: 'No such datas'
-        })
-      }
-      return res.json(datas)
-    })
+
+    if (/^\d+$/.test(search)) {
+      datasModel.find({ $and: [{ frequency: search }, { letter: { $exists: true }}] }, function (err, datas) {
+        if (err) {
+          return res.status(500).json({
+            message: 'Error when deleting the datas.',
+            error: err
+          })
+        }
+        if (!datas) {
+          return res.status(404).json({
+            message: 'No such datas'
+          })
+        }
+        return res.json(datas)
+      })
+    } else {
+      datasModel.find({ $and: [{ letter: search }, { frequency: { $exists: true }}] }, function (err, datas) {
+        if (err) {
+          return res.status(500).json({
+            message: 'Error when deleting the datas.',
+            error: err
+          })
+        }
+        if (!datas) {
+          return res.status(404).json({
+            message: 'No such datas'
+          })
+        }
+        return res.json(datas)
+      })
+    }
   }
 }
