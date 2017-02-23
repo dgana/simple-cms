@@ -30,31 +30,9 @@ module.exports = {
 
   update: function (req, res) {
     var id = req.params.id
-    datasModel.findOne({_id: id}, function (err, datas) {
-      if (err) {
-        return res.status(500).json({
-          message: 'Error when getting datas',
-          error: err
-        })
-      }
-      if (!datas) {
-        return res.status(404).json({
-          message: 'No such datas'
-        })
-      }
-
-      datas.letter = req.body.letter || datas.letter;      datas.frequency = req.body.frequency || datas.frequency
-
-      datas.save(function (err, datas) {
-        if (err) {
-          return res.status(500).json({
-            message: 'Error when updating datas.',
-            error: err
-          })
-        }
-
-        return res.json(datas)
-      })
+    datasModel.findOneAndUpdate({_id: id}, { letter: req.body.letter, frequency: req.body.frequency }, {new: true}, function (err, doc) {
+      if (err) return res.send(500, { error: err })
+      return res.json(doc)
     })
   },
 
